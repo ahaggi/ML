@@ -1,0 +1,339 @@
+There are three variants of gradient descent, which differ in how much data we use to compute the gradient of the objective function.
+Depending on the amount of data, we make a trade-off between the accuracy of the parameter update and the time it takes to perform an update.
+
+Gradient descent variants
+
+    Batch gradient descent
+    Stochastic gradient descent
+    Mini-batch gradient descent
+
+θ: randomly inittialized value
+J: the objective function
+η: learning rate
+θ=θ−η⋅∇J(θ)
+
+
+
+Perceptrons
+
+Perceptron is a single layer neural network and a multi-layer perceptron is called Neural Networks.
+
+    The perceptron consists of 4 parts:
+        Input values or One input layer
+        Weights and Bias
+        Net sum
+        Activation Function
+
+    A perceptron takes several binary inputs, x1,x2,…, and produces a single binary output, 
+    that output is being used as the input to several other perceptrons at the next layer.
+
+        output={ 0 if w⋅x + b ≤0
+                 1 if w⋅x + b >0 
+                                where x is input
+                                    w is weight
+                                    b is bais
+    
+    The first column of perceptrons - what we'll call the first layer of perceptrons - is to make very simple decisions, 
+    by weighing the input evidence. 
+    The perceptrons in the second layer is making a decision by weighing up the results from the first layer of decision-making. 
+    In this way a perceptron in the second layer can make a decision at a more complex and more abstract level than perceptrons in 
+    the first layer. And even more complex decisions can be made by the perceptron in the third layer. 
+    In this way, a many-layer network of perceptrons can engage in sophisticated decision making.
+
+
+
+Sigmoid neurons
+
+    if a small change in a weight (or bias) causes only a small change in output, then we could use this fact to modify the weights and 
+    biases to get our network to behave more in the manner we want.
+
+    The problem is that this isn't what happens when our network contains perceptrons. In fact, a small change in the weights or bias 
+    of any single perceptron in the network can sometimes cause the output of that perceptron to completely flip.
+
+    Sigmoid neurons are similar to perceptrons, but modified so that small changes in their weights and bias cause only a small change in
+    their output. 
+
+    Just like a perceptron, the sigmoid neuron has inputs, x1,x2,…. But instead of being just 0 or 1, these inputs can also take on any values 
+    between 0 and 1. So, for instance, 0.638… is a valid input for a sigmoid neuron.
+
+    Also just like a perceptron, the sigmoid neuron has weights for each input, w1,w2,…, and an overall bias, b. But the output is not 0 or 1. 
+    Instead, it's σ(w⋅x+b), where σ is called the sigmoid function.
+
+    it's the smoothness of the σ function that is the crucial fact, not its detailed form. The smoothness of σ means that small 
+    changes Δwj in the weights and Δb in the bias will produce a small change Δoutput in the output.
+
+    Suppose we want the output from the network to indicate either "the input image is a 9" or "the input image is not a 9". 
+    Obviously, it'd be easiest to do this if the output was a 0 or a 1, as in a perceptron. 
+    But in practice we can set up a convention to deal with this, for example, by deciding to interpret any output of at least 0.5 as 
+    indicating a "9", and any output less than 0.5 as indicating "not a 9". 
+
+    Sigmoid neurons simulating perceptrons 
+    Suppose the weights and biases are such that w⋅x+b≠0 for the input x to any particular perceptron in the network. 
+    What the diffreence if all the perceptrons in the network are replaced by sigmoid neurons, when (w⋅x+b) is multiplied 
+    by a positive constant c? where c>0
+
+    You'll expect that for a very big positive/neg "c" multiplied with (w⋅x+b), the sigmoid'll output ~ (0 or 1), but
+
+    perceptron:(w⋅x+b) the output is always (0 or 1) as expected
+
+    sigmoid: 
+    - when (w⋅x+b) != 0
+        c→∞   ==> the output of the "σ (c*(w⋅x+b) )" is ~ 1
+        c→ -∞ ==> the output of the "σ (c*(w⋅x+b) )" is ~ 0
+
+    - when (w⋅x+b) = 0
+        sigmoid: c→∞ ==> the output of the σ (c*(w⋅x+b) )  = 0.5 but expected a value either (~0 or ~1)
+
+
+
+
+The architecture of neural networks
+
+    the leftmost layer in this network is called the input layer, and the neurons within the layer are called input neurons. 
+    The rightmost or output layer contains the output neurons.
+
+    Somewhat confusingly, and for historical reasons, such multiple layer networks are sometimes called multilayer perceptrons or MLPs, 
+    despite being made up of sigmoid neurons, not perceptrons. 
+
+    When the output from one layer is used as input to the next layer. That network is called feedforward neural networks.
+
+
+
+A simple network to classify handwritten digits
+
+    First, we'd like a way of breaking an image containing many digits into a sequence of separate images, each containing a single digit.
+    Once the image has been segmented, the program then needs to classify each individual digit. 
+
+    We'll focus on writing a program to solve the second problem, that is, classifying individual digits. 
+    The first problem "segmentation" is not so difficult to solve, once you have a good way of classifying individual digits.
+
+    our training data for the network will consist of many 28 by 28 pixel images of scanned handwritten digits, 
+    and so the input layer contains 784=28×28 neurons. 
+
+    The input pixels are greyscale, with a value of 0.0 representing white, a value of 1.0 representing black, and in between values 
+    representing gradually darkening shades of grey.
+
+    The second layer of the network is a hidden layer. containing just n=15 neurons.
+
+    The output layer of the network contains 10 neurons, we number the output neurons from 0 through 9.  
+    we could use another seemingly natural way of representing the otuput by using just 4 output neurons, treating each neuron as taking 
+    on a binary value. Four neurons are enough to encode the answer, since 24=16 is more than the 10 possible values for the input digit.
+
+    Why should our network use 10 neurons for the output layer instead? Isn't that inefficient? 
+    suppose for the sake of argument that there is 4 sigmoid neuron in the hidden layer that will collectively identify if the image is "0",
+    so if all four of these hidden neurons are firing then we can conclude that the digit is a 0. 
+    In the "10 neurons" output layer, the 1.st neuron will decide the image is zero, but if we had 4 outputs, then the first output neuron 
+    would be trying to decide what the most significant bit of the digit was. And there's no easy way to relate that most significant bit to 
+    simple shapes like those shown above. 
+
+
+    Exercise 
+    bitwise representation of a digit by adding an extra layer to the three-layer network above{
+        There is a way of determining the bitwise representation of a digit by adding an extra layer to the three-layer network above.
+        The extra layer converts the output from the previous layer into a binary representation.
+        Assume that the first 3 layers of neurons are such that the correct output in the third layer (i.e., the old output layer) has activation 
+        at least 0.99, and incorrect outputs have activation less than 0.01.
+        Find a set of weights and biases for the new output layer.
+        We’ve assumed the network has been well-trained. So, when the prediction is i, only the i-th neuron in the old ouput layer is greater 
+        than 0.99 as outputs of rest neurons are less than 0.01. 
+
+        let us say the neurons in the "old" output layer are (a0..a9),
+        and the new output layer are (res0..res9)
+        0000
+        0001
+        0010
+        0011
+        0100
+        0101
+        0110
+        0111
+        1000
+        1001
+
+        we see that the first "new" output neuron has to be 0 if one of (a0..a7) = 0,99  and 1 if a8 or a9 =0,99
+                    the 2.nd will be 0 if one of (a0,a1,a2,a3,a8,a9) = 0,99 and 1 if (a4..a7)
+                    the 3.rd will be 0 if one of (a0,a1,a4,a5,a8,a9) = 0,99 and 1 if (a2,a3,a6,a7)
+                    the 4.th will be 0 if one of (a0,a2,a4,a6,a8) = 0,99 and 1 if (a1,a3,a5,a7,a9)
+        (
+            0 0 0 0 0 0 0 0 1 1
+            0 0 0 0 1 1 1 1 0 0
+            0 0 1 1 0 0 1 1 0 0
+            0 1 0 1 0 1 0 1 0 1
+        )
+
+        so the weight matrix can be 
+                                    (
+                                        (-100) (-100) (-100) (-100) (-100) (-100) (-100) (-100) ( 100) ( 100)
+                                        (-100) (-100) (-100) (-100) ( 100) ( 100) ( 100) ( 100) (-100) (-100)
+                                        (-100) (-100) ( 100) ( 100) (-100) (-100) ( 100) ( 100) (-100) (-100) 
+                                        (-100) ( 100) (-100) ( 100) (-100) ( 100) (-100) ( 100) (-100) ( 100)
+                                    )
+
+        and if the a3 = 0,99 and the rest 0,01 
+        (
+            0,01,
+            0,01,
+            0,01,
+            0,99,
+            0,01,
+            0,01,
+            0,01,
+            0,01,
+            0,01,
+            0,01,
+        )
+
+
+        the activation function for the output neuron res0 will be
+        res0 = σ ( (-1) + (-1) + (-1) + (-99) + (-1) + (-1) + (-1) + (-1) + ( 1) + ( 1) ) = σ(-104) = 0
+        res1 = σ ( (-1) + (-1) + (-1) + (-99) + ( 1) + ( 1) + ( 1) + ( 1) + (-1) + (-1) ) = σ(-100) = 0
+        res2 = σ ( (-1) + (-1) + ( 1) + ( 99) + (-1) + (-1) + ( 1) + ( 1) + (-1) + (-1) ) = σ(  96) = 1
+        res3 = σ ( (-1) + ( 1) + (-1) + ( 99) + (-1) + ( 1) + (-1) + ( 1) + (-1) + ( 1) ) = σ(  98) = 1
+
+        Notice that there no need for bais here.
+    }
+
+
+Learning with gradient descent
+    we'll need is a data set to learn from - a so-called training data set. We'll use the MNIST data set http://yann.lecun.com/exdb/mnist/
+
+    We'll use the notation x to denote a training input. It'll be convenient to regard each training input x as a 28×28=784-dimensional vector. 
+    Each entry in the vector represents the grey value for a single pixel in the image which means:
+                                                                                            0.0 for white, 
+                                                                                            0>value<1 for gray, 
+                                                                                            1.0 for black.
+    The notation y is donated to the desired output, that will be 10-dimensional vector so when x is an image of "6", y(x) = (0,0,0,0,0,0,1,0,0,0)
+    The notation a is donated to the output from the network, that will be 10-dimensional vector.
+
+    To quantify how well we're achieving this goal we define a cost function
+        Cx ≡ ( ∥y(x)−a∥^2 ) / 2 , for individual training examples
+        C(w,b) ≡ (1/n) ∑ Cx
+
+    Here, w denotes the collection of all weights in the network, b all the biases, n is the total number of training inputs,
+    and the sum is over all training inputs, x.
+    Of course, the output a depends on x, w and b, but to keep the notation simple I haven't explicitly indicated this dependence.
+    The notation ∥v∥ just denotes the usual length function for a vector v. 
+
+    We'll call C(w,b) the quadratic cost function; it's also sometimes known as the mean squared error or just MSE. 
+
+    The cost C(w,b) becomes small, i.e., Cx ≈ 0, precisely when y(x) is approximately equal to the output, a
+
+    we want to find a set of weights and biases which make the cost as small as possible. We'll do that using an algorithm known as gradient descent.
+
+----------------
+
+    For now we're going to concentrate on that we've simply been given a function F of many variables and we want to minimize that function. 
+
+    Let's suppose we're trying to minimize the function F, F(v). This could be any real-valued function of many variables, v=(v1,v2,…) 
+
+    We could compute the gradient by partially derive F and using higher derivative to find out (min, max and saddle point) of F, 
+    that is fine when the function has just one or a few variables. But it'll turn into a nightmare when we have millions or billions 
+    of variables. In our case the variables are "weights and biases". 
+
+    Δv≡(Δv1,Δv2...)
+
+    ∇F≡(∂F/∂v1,∂F/∂v2...)
+
+     ∇F points in the direction where F increases fastest
+    −∇F points in the direction where F decreases fastest
+
+    ΔF ≈ ∇F⋅Δv   .......(9)
+
+    So if we want to minimize the quadratic cost function F, we need to find Δv
+        v_update = v − η∇F  ........(11)
+        Where η is a small, positive parameter (known as the learning rate). 
+
+    Then we'll use this update rule again, to make another move. If we keep doing this, over and over, 
+    we'll keep decreasing F until - we hope - we reach a global minimum.
+
+    To make gradient descent work correctly, we need to choose the learning rate η to be small enough that Equation (9) is a good approximation. 
+    But we don't want η to be too small, since that will make the changes Δv tiny, and thus the gradient descent algorithm will work very slowly.
+
+----------------
+
+    Remember that:
+        the weights and biases are the variables [v1,v2..] in the previous example. 
+        the training inputs are some sort of constants, imagine this
+                        f(x,y) = 2x^3 + a x y - y
+                        "x" is similar to a "weight", "y" is similar to a "bais" and "a" is similar to a training input?? read more!!
+
+    If we go back to the cost function C(w,b) and try to minimize it by using ∇C, we notice that the cost function C(w,b) has the form 
+        C(w,b) ≡ (1/n) ∑ Cx  , is the average of the MSE for the entire training inputs   
+    that is, it's an average over costs 
+        Cx ≡ ( ∥y(x)−a∥^2 ) / 2 , Cx is mean squared error (MSE) for individual training example
+
+    Cx is multiplied by 1/2 so that when we take the derivative we will get "2(...)", and the 2s cancel out. 
+
+    Which means to compute the gradient ∇C we need to compute the gradients ∇Cx separately for each training input, x, and then average them.
+    Unfortunately, when the number of training inputs is very large this can take a long time, and learning thus occurs slowly.
+
+{
+    Batch gradient descent
+        Computes the gradient of the cost function C(w,b) to the parameters (weights and biases) for the entire training inputs.
+        As we need to calculate the gradients for the whole training inputs to perform just one update, batch gradient descent have:
+            Advantages:
+              It is guaranteed to converge to the global minimum for convex error surfaces and to a local minimum for non-convex surfaces.
+            Disadvantages:
+              It can be very slow 
+              It performs redundant computations for large datasets, as it recomputes gradients for similar examples before each parameter update. 
+              It's intractable for datasets that don't fit in memory.
+
+
+    Stochastic gradient descent
+        Computes the gradient of the cost function C(w,b) to the parameters (weights and biases) for each training input,
+        SGD performs frequent updates with a high variance that cause the cost function C(w,b) to fluctuate heavily.
+            Advantages:
+              Stochastic gradient descent (SGD) in contrast (BGD), avoid the redundant computations.
+              It is therefore usually much faster and can also be used to learn online.
+              SGD's fluctuation, enables it to jump to new and potentially better local minima, when we slowly decrease the learning rate.
+            Disadvantages:
+              SGD's fluctuation, could cause overshooting.
+
+
+    Mini-batch gradient descent
+        It takes the best of both worlds (SGD & BGD) and performs an update for every mini-batch of m randomly chosen training inputs.
+        The idea is to estimate the gradient ∇C by computing ∇Cx for a small sample of randomly chosen training inputs. 
+        By averaging over this small sample it turns out that we can quickly get a good estimate of the true gradient ∇C 
+        for the whole training inputs. 
+            Advantages:
+              reduces the variance of the parameter updates.
+              more stable convergence.
+              can make use of highly optimized matrix optimizations common to state-of-the-art deep learning libraries.
+              deep learning libraries makes computing the gradient w.r.t. a mini-batch very efficient.
+            Disadvantages:
+              choosing a proper learning rate can be difficult. A learning rate that is too small leads to painfully slow convergence.
+        if we have a training set of size n=60,000, and choose a mini-batch size of (say) m=10, 
+        this means we'll get a factor of 6,000 speedup in estimating the gradient
+}
+
+    We will use Mini-batch gradient descent, we'll label those random training inputs X1,X2,…,Xm
+    Provided the sample size m is large enough we expect that the average value of the ∇Cx for the mini-batch m will be roughly equal to
+    the average value of the ∇Cx over all the training inputs
+
+            ∇C ≈ 1/m ∑ ∇Cx
+
+    we will apply an update to the new w and b  "∇C is vector [∂C/∂w1 ,  ] and also "w" and "b" are vectors"  
+            w_update =  w − ( η/m ∑ ∂Cx/∂w )
+            b_update =  b − ( η/m ∑ ∂Cx/∂w )
+
+    Note that when implementing the update rule in software, "w" and "b" should not be updated until after you have computed the new values 
+    for both of them. Specifically, you don’t want to use the new value of the vector "w" to calculate the new value of the vector "b".
+
+    First we update (w,b) after training with randomly chosen mini-batch, and then we pick out another randomly chosen mini-batch and 
+    train with those. And so on, until we've exhausted the training inputs, which is said to complete an "epoch" of training. 
+    At that point we start over with a new epoch.
+
+    epoch: is one completed iteration over all the training example 
+
+
+
+
+
+Making the learning rate proportional to the slope
+
+
+
+,,,,,
+Notice that if C was = (y- a(L))^2 
+∂C/∂a(L) will be -2( y - a(L) ), 
+the end res will be the same.
